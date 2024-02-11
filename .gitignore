@@ -1,0 +1,56 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Gradio specific files
+gradio/__pycache__/
+gradio/.ipynb_checkpoints/
+
+# FastAPI specific files
+__pycache__/
+.pytest_cache/
+.dockerignore
+Dockerfile
+.dockerignore
+
+# Editor-specific files
+.vscode/
+.idea/
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+
+# Logs and databases
+*.log
+*.db
+
+# Output of coverage.py
+htmlcov/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# PyInstaller
+dist/
+build/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.env.*
+
