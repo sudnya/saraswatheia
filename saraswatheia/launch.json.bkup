@@ -1,0 +1,27 @@
+
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "FastAPI",
+        "type": "python",
+        "request": "launch",
+        "module": "uvicorn",
+            "args": [ "saraswatheia.app.main:app" ],
+            "jinja": true
+        // ... other configurations
+      },
+      {
+        "name": "Gradio",
+        "type": "python",
+        "request": "launch",
+        "program": "saraswatheia/my_gradio/main.py",
+        "console": "integratedTerminal",
+        "env": {
+          "PYTHONPATH": "saraswatheia"
+        },
+        // ... other configurations
+      }
+    ]
+  }
+  

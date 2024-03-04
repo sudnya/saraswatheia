@@ -69,6 +69,7 @@ async def create_upload_file(file: UploadFile = File(...)):
 
 @app.post("/api/v0/uploadstring")
 async def create_upload_string(body: dict = Body(...)):
+    # curl -X POST -H "Content-Type: application/json" -d '{"string": "test this"}' http://127.0.0.1:8000/api/v0/uploadstring
     return model_stuff(body["string"])
 
 # Add CORS middleware
