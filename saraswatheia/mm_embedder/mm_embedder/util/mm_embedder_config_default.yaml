@@ -1,0 +1,7 @@
+mm_embedder:
+  home_path: "/app/mm-embedder-service"
+
+orm:
+  db_url: "sqlite:///app.db"
+
+verbose: True
