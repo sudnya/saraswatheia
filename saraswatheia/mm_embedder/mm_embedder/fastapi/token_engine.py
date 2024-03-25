@@ -41,7 +41,7 @@ async def create_token(user_token: token.Token, db: Session = Depends(get_db)):
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
-    return {"message": "Token created successfully"}
+    return {f"message": "Token created successfully {db_item}"}
 
 
 Base.metadata.create_all(bind=engine)

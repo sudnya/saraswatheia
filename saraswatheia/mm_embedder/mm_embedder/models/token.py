@@ -27,32 +27,3 @@ tokenDb = Table('token', get_metadata(),
                 Column('name', String(50))
 )
 
-
-
-'''
-# models.py
-
-from pydantic import BaseModel
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-
-# SQLAlchemy Base
-Base = declarative_base()
-
-# Pydantic model for data validation and serialization
-class Item(BaseModel):
-    id: int
-    name: str
-
-    class Config:
-        orm_mode = True  # Allows Pydantic to work with SQLAlchemy models
-
-
-# SQLAlchemy model for database interaction
-class ItemDB(Base):
-    __tablename__ = "items"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-
-    '''

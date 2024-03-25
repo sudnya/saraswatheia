@@ -5,6 +5,13 @@ import numpy as np
 from PIL import Image
 import io
 from transformers import FuyuForCausalLM, FuyuProcessor
+from fastapi import FastAPI, HTTPException, Depends, Security
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from mm_embedder.database.database import get_db
+
+from sqlalchemy.orm import Session
+from mm_embedder.models.token import TokenDB
+
 
 TINY_FUYU = "hf-internal-testing/tiny-random-FuyuForCausalLM"
 ADEPT_FUYU = "adept/fuyu-8b"
@@ -12,6 +19,8 @@ API_BASE = "/api/v0"
 CURRENT_FUYU = TINY_FUYU
 app = FastAPI()
 
+# Define the security scheme
+bearer_scheme = HTTPBearer()
 
 IMAGE_IN_MEMORY = None
 
@@ -54,11 +63,21 @@ def fuyu_stuff(text_prompt: str = None):
     generated_ids = model.generate(**inputs, max_new_tokens=7)
     generation_text = processor.batch_decode(generated_ids, skip_special_tokens=True)
     return generation_text
-'''
-@app.get(API_BASE+"/token")
-async def create_token():
-    return {"random": np.random.random()}
-'''
+
+@app.get(API_BASE+"/get_embeddings")
+async def get_embeddings(db: Session = Depends(get_db), credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
+    if credentials.scheme != "Bearer":
+        raise HTTPException(status_code=403, detail="Invalid authentication scheme")
+    
+    bearer_token = credentials.credentials
+    print(f"Looking for {bearer_token}")
+    token_in_db = db.query(TokenDB).filter(TokenDB.id == bearer_token).first()
+    if not token_in_db:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
+    return {"message": f"Welcome, {token_in_db.name}!"}
+
+
 
 @app.post(API_BASE+"/uploadfile")
 async def create_upload_file(file: UploadFile = File(...)):

@@ -1,6 +1,9 @@
 from mm_embedder.util.get_config import create_config
 #from mm_embedder.fastapi.mm_embedder_backend import app as api_app
-from mm_embedder.fastapi.token_engine import app as api_app 
+#from mm_embedder.fastapi.token_engine import app as api_app 
+from mm_embedder.fastapi.mm_embedder_backend import app as api_app
+from mm_embedder.database.database import engine, get_metadata
+from mm_embedder.models.token import tokenDb
 
 import uvicorn
 from uvicorn.supervisors import ChangeReload
@@ -12,6 +15,7 @@ from fastapi import Request
 import asyncio
 import sys
 import os
+import random
 
 config = create_config()
 
@@ -93,9 +97,23 @@ def setup_and_run_server():
 
     supervisor.run()
 
+def create_token_if_not_exists():
+    get_metadata().create_all(engine)
+    with engine.connect() as conn:
+        result = conn.execute(tokenDb.select())
+        if not result.fetchone():
+            conn.execute(tokenDb.insert().values(name="test_token", id=random.randint(0, 100)))
+
+# Function to display all rows of the table
+def display_all_rows():
+    with engine.connect() as conn:
+        result = conn.execute(tokenDb.select())
+        for row in result:
+            print(row)
 
 if __name__ == "__main__":
-    # create_token_if_not_exists()
+    create_token_if_not_exists()
+    display_all_rows()
     try:
         setup_and_run_server()
     except Exception as e:
